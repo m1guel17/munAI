@@ -286,7 +286,7 @@ Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before
 
 If you discover a security vulnerability, please report it privately via [GitHub Security Advisories](https://github.com/m1guel17/munAI/security/advisories/new) rather than opening a public issue.
 
-munAI runs with access to your filesystem and can execute shell commands. Treat it with the same caution you would give to any software with system access. See [SECURITY.md](SECURITY.md) for the full security model.
+munAI runs with access to your filesystem and can execute shell commands. Treat it with the same caution you would give to any software with system access. See [SECURITY.md](https://github.com/m1guel17/munAI/docs/security.md) for the full security model.
 
 ## Acknowledgments
 
