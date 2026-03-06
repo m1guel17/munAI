@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>munAI</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- Mobile header (hidden on desktop) -->
+  <header id="mobile-header">
+    <button id="hamburger-btn" aria-label="Open menu">&#9776;</button>
+    <span class="mobile-title">munAI</span>
+    <span id="mobile-status-dot" class="dot dot--disconnected"></span>
+  </header>
+
+  <div id="app">
+
+    <!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
+    <aside id="sidebar">
+      <div id="sidebar-header">
+        <span class="logo">&#129302; munAI</span>
+        <span id="status-dot" class="dot dot--disconnected" title="Disconnected"></span>
+      </div>
+
+      <nav id="sidebar-nav">
+        <button class="nav-btn nav-btn--active" data-view="chat">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 2h12v9H9l-3 3v-3H2V2z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+          </svg>
+          Chat
+        </button>
+        <button class="nav-btn" data-view="sessions">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 4h12M2 7h12M2 10h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Sessions
+        </button>
+        <button class="nav-btn" data-view="health">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2v3M8 11v3M2 8h3M11 8h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+          Health
+        </button>
+        <button class="nav-btn" data-view="audit">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2 4h12M2 8h8M2 12h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Audit Log
+        </button>
+        <button class="nav-btn" data-view="usage">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="2" y="8" width="3" height="6" rx="1" fill="currentColor" opacity=".7"/>
+            <rect x="6.5" y="5" width="3" height="9" rx="1" fill="currentColor" opacity=".85"/>
+            <rect x="11" y="2" width="3" height="12" rx="1" fill="currentColor"/>
+          </svg>
+          Usage
+        </button>
+        <button class="nav-btn" data-view="tools">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 2l4 4-8 8H2v-4L10 2z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+          </svg>
+          Tools
+        </button>
+        <button class="nav-btn" data-view="skills">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2l1.5 4.5H14l-3.7 2.7 1.4 4.3L8 11l-3.7 2.5 1.4-4.3L2 6.5h4.5L8 2z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+          </svg>
+          Skills
+        </button>
+        <button class="nav-btn" data-view="channels">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="2" fill="currentColor"/>
+            <path d="M4 8a4 4 0 0 1 8 0" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <path d="M1.5 8a6.5 6.5 0 0 1 13 0" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".5"/>
+          </svg>
+          Channels
+        </button>
+        <button class="nav-btn" data-view="cron">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M8 5v3.5l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Cron Jobs
+        </button>
+        <button class="nav-btn" data-view="config">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.42 1.42M11.53 11.53l1.42 1.42M3.05 12.95l1.42-1.42M11.53 4.47l1.42-1.42" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Config
+        </button>
+        <button class="nav-btn" data-view="doctor">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2Z" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M8 5v3l2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Doctor
+        </button>
+        <button class="nav-btn" data-view="devices">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="2" y="4" width="8" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M10 7h3M11 5.5l2 1.5-2 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Devices
+        </button>
+      </nav>
+
+      <button id="kill-switch-btn" class="kill-switch-btn">&#9632; Kill Switch</button>
+
+      <div id="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle" title="Toggle dark/light mode">&#9680;</button>
+        <span class="sidebar-version">v0.1.0</span>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ─────────────────────────────────────────────────────── -->
+    <main id="main">
+
+      <!-- ── Chat View ─────────────────────────────────────────────────────── -->
+      <div id="view-chat" class="view view--active">
+        <div id="chat-panel">
+          <div id="messages" role="log" aria-live="polite" aria-label="Chat messages"></div>
+
+          <!-- Shell approval banner -->
+          <div id="approval-banner" class="approval-banner" hidden>
+            <div class="approval-banner__content">
+              <span class="approval-banner__label">&#9888;&#65039; Shell command requires approval:</span>
+              <code id="approval-command" class="approval-banner__command"></code>
+            </div>
+            <div class="approval-banner__actions">
+              <button id="approval-approve-btn" class="btn btn--success">Approve</button>
+              <button id="approval-deny-btn" class="btn btn--danger">Deny</button>
+            </div>
+          </div>
+
+          <div id="input-area">
+            <textarea
+              id="user-input"
+              placeholder="Message munAI… (Enter to send, Shift+Enter for newline)"
+              rows="1"
+              autocomplete="off"
+              spellcheck="true"
+            ></textarea>
+            <button id="send-btn" type="button" title="Send message" disabled>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M2 10L18 2L10 18L8 12L2 10Z" stroke="currentColor" stroke-width="1.5"
+                  stroke-linejoin="round" fill="none"/>
+              </svg>
+            </button>
+            <button id="stop-btn" type="button" title="Stop generation" hidden>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <rect x="3" y="3" width="12" height="12" rx="2" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+
+          <div id="chat-footer" class="chat-footer">
+            <span id="footer-tokens" class="chat-footer__tokens"></span>
+            <span id="footer-tokens-sep" class="chat-footer__sep" hidden>·</span>
+            <span id="footer-model" class="chat-footer__model">—</span>
+            <span class="chat-footer__sep">·</span>
+            <span id="footer-session" class="chat-footer__session">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Sessions View ─────────────────────────────────────────────────── -->
+      <div id="view-sessions" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Sessions</h2>
+          <button id="sessions-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+
+        <!-- Toolbar shown when a session is selected -->
+        <div id="session-toolbar" class="session-toolbar" hidden>
+          <span id="session-toolbar-id" class="session-toolbar__id"></span>
+          <div class="session-toolbar__actions">
+            <button id="session-reset-btn" class="btn btn--danger btn--sm">Reset</button>
+            <button id="session-compact-btn" class="btn btn--secondary btn--sm">Compact</button>
+            <button id="session-export-btn" class="btn btn--secondary btn--sm">Export</button>
+          </div>
+        </div>
+
+        <div id="sessions-list" class="sessions-list"></div>
+      </div>
+
+      <!-- ── Health View ────────────────────────────────────────────────────── -->
+      <div id="view-health" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">System Health</h2>
+          <button id="health-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div class="health-cards">
+          <div id="health-gateway-card" class="health-card">
+            <div class="panel-loading">Loading…</div>
+          </div>
+          <div id="health-provider-card" class="health-card">
+            <div class="panel-loading">Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Audit View ─────────────────────────────────────────────────────── -->
+      <div id="view-audit" class="view">
+        <div id="audit-panel">
+          <div id="audit-toolbar" class="audit-toolbar">
+            <div class="audit-toolbar__left">
+              <input type="date" id="audit-date-picker" />
+              <select id="audit-type-filter">
+                <option value="">All event types</option>
+                <option value="agent.turn_start">agent.turn_start</option>
+                <option value="agent.turn_end">agent.turn_end</option>
+                <option value="agent.model_call">agent.model_call</option>
+                <option value="tool.call">tool.call</option>
+                <option value="tool.result">tool.result</option>
+                <option value="tool.approval_requested">tool.approval_requested</option>
+                <option value="tool.approval_granted">tool.approval_granted</option>
+                <option value="tool.approval_denied">tool.approval_denied</option>
+                <option value="tool.blocked">tool.blocked</option>
+                <option value="session.reset">session.reset</option>
+                <option value="session.compact">session.compact</option>
+                <option value="gateway.connect">gateway.connect</option>
+                <option value="gateway.auth_fail">gateway.auth_fail</option>
+                <option value="channel.message_in">channel.message_in</option>
+              </select>
+              <input id="audit-search" type="text" placeholder="Search…" autocomplete="off" />
+            </div>
+            <div class="audit-toolbar__right">
+              <button id="audit-live-toggle" class="btn btn--secondary btn--sm audit-live-btn" title="Live: OFF">&#11044; Live</button>
+              <button id="audit-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+            </div>
+          </div>
+          <div id="audit-table-wrap">
+            <table id="audit-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Event</th>
+                  <th>Session</th>
+                  <th>Detail</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody"></tbody>
+            </table>
+            <div id="audit-empty" class="audit-empty" hidden>No events found.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Usage View ─────────────────────────────────────────────────────── -->
+      <div id="view-usage" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Usage &amp; Cost</h2>
+          <button id="usage-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div id="usage-summary" class="usage-summary"></div>
+        <div id="usage-breakdown" class="usage-breakdown"></div>
+      </div>
+
+      <!-- ── Tools View ─────────────────────────────────────────────────────── -->
+      <div id="view-tools" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Tools</h2>
+          <button id="tools-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div class="panel-tabs">
+          <button class="panel-tab panel-tab--active" data-tab="catalog">Catalog</button>
+          <button class="panel-tab" data-tab="approvals">Approval Queue</button>
+          <button class="panel-tab" data-tab="history">History</button>
+        </div>
+        <div id="tools-catalog-pane" class="pane">
+          <div id="tools-catalog"><div class="panel-loading">Loading…</div></div>
+        </div>
+        <div id="tools-approvals-pane" class="pane pane--hidden">
+          <div id="tools-approvals"><div class="panel-loading">Loading…</div></div>
+        </div>
+        <div id="tools-history-pane" class="pane pane--hidden">
+          <div id="tools-history"><div class="panel-loading">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- ── Skills View ────────────────────────────────────────────────────── -->
+      <div id="view-skills" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Skills Registry</h2>
+          <button id="skills-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div id="skills-list"><div class="panel-loading">Loading…</div></div>
+      </div>
+
+      <!-- ── Channels View ──────────────────────────────────────────────────── -->
+      <div id="view-channels" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Channel Status</h2>
+          <button id="channels-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div id="channels-list"><div class="panel-loading">Loading…</div></div>
+      </div>
+
+      <!-- ── Cron View ──────────────────────────────────────────────────────── -->
+      <div id="view-cron" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Cron Jobs</h2>
+          <span id="cron-scheduler-status" class="panel-header__status"></span>
+          <button id="cron-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div id="cron-list"><div class="panel-loading">Loading…</div></div>
+      </div>
+
+      <!-- ── Config View ──────────────────────────────────────────────────────── -->
+      <div id="view-config" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Config Editor</h2>
+          <button id="config-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div id="config-body"><div class="panel-loading">Loading…</div></div>
+      </div>
+
+      <!-- ── Doctor View ──────────────────────────────────────────────────────── -->
+      <div id="view-doctor" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Diagnostics</h2>
+          <button id="doctor-refresh-btn" class="btn btn--secondary btn--sm">Run Checks</button>
+        </div>
+        <div id="doctor-list"><div class="panel-loading">Loading…</div></div>
+      </div>
+
+      <!-- ── Devices View ──────────────────────────────────────────────────────── -->
+      <div id="view-devices" class="view">
+        <div class="panel-header">
+          <h2 class="panel-title">Paired Devices</h2>
+          <button id="devices-refresh-btn" class="btn btn--secondary btn--sm">Refresh</button>
+        </div>
+        <div id="devices-list"><div class="panel-loading">Loading…</div></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Kill switch confirmation modal -->
+  <div id="kill-switch-modal" class="modal" hidden>
+    <div class="modal__overlay"></div>
+    <div class="modal__box">
+      <h3>Emergency Stop</h3>
+      <p>Aborts all running agent sessions and blocks new requests until resumed.</p>
+      <div class="modal__actions">
+        <button id="kill-cancel-btn" class="btn btn--secondary">Cancel</button>
+        <button id="kill-confirm-btn" class="btn btn--danger">Confirm Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script src="/static/js/utils.js"></script>
+  <script src="/static/js/ws.js"></script>
+  <script src="/static/js/chat.js"></script>
+  <script src="/static/js/sessions.js"></script>
+  <script src="/static/js/health.js"></script>
+  <script src="/static/js/audit.js"></script>
+  <script src="/static/js/usage.js"></script>
+  <script src="/static/js/tools.js"></script>
+  <script src="/static/js/skills.js"></script>
+  <script src="/static/js/channels.js"></script>
+  <script src="/static/js/cron.js"></script>
+  <script src="/static/js/config.js"></script>
+  <script src="/static/js/doctor.js"></script>
+  <script src="/static/js/devices.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
