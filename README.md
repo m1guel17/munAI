@@ -1,9 +1,12 @@
-# 🤖 munAI — Personal AI Assistant
+# munAI — Personal AI Assistant
 
 **Your own AI assistant. Self-hosted. Always on. Your data, your hardware, your rules.**
+<div align="center">
+<img src="munai_logo.png" style="width:500%; height:auto;">
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12+-3776AB.svg)](https://www.python.org/downloads/)
+</div>
 
 ---
 
@@ -45,14 +48,14 @@ Once running, open `http://127.0.0.1:18700` in your browser to chat via WebChat,
 Telegram / WebChat / CLI
          │
          ▼
-┌─────────────────────────┐
-│       Gateway            │
-│    (control plane)       │
-│  ws://127.0.0.1:18700   │
-└────────────┬────────────┘
+┌──────────────────────────┐
+│        Gateway           │
+│     (control plane)      │
+│   ws://127.0.0.1:18700   │
+└────────────┬─────────────┘
              │
              ▼
-┌─────────────────────────┐
+┌──────────────────────────┐
 │    Agent Runtime         │
 │                          │
 │  Context Assembly        │
@@ -60,7 +63,7 @@ Telegram / WebChat / CLI
 │  → Tool Execution        │
 │  → Stream Response       │
 │  → Persist to Session    │
-└─────────────────────────┘
+└──────────────────────────┘
 ```
 
 The **Gateway** is a single async Python process that handles all message routing, authentication, session management, and channel connections. It never reasons — it only routes.
@@ -212,12 +215,6 @@ Single config file at `~/.munai/munai.json` (JSON5 — comments and trailing com
 
 API keys are referenced by environment variable name — never stored as plaintext in config.
 
-## Mission Control (Optional)
-
-[Mission Control](https://github.com/m1guel17/mission-control) is a separate, optional application that adds multi-agent workspace orchestration on top of munAI. Create workspaces where a leader agent coordinates a team of sub-agents to accomplish complex projects.
-
-munAI is your personal assistant. Mission Control is where your assistant becomes a project manager.
-
 ## Architecture
 
 munAI follows a hub-and-spoke architecture inspired by [OpenClaw](https://github.com/openclaw/openclaw), rebuilt from scratch in Python with security and auditability as first-class concerns.
@@ -246,8 +243,8 @@ Everything is files. No database. No Redis. No Docker (unless you want sandboxin
 ## Development
 
 ```bash
-git clone https://github.com/m1guel17/munai.git
-cd munai
+git clone https://github.com/m1guel17/munAI.git
+cd munAI
 
 python -m venv .venv
 source .venv/bin/activate
@@ -287,7 +284,7 @@ Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before
 
 ## Security
 
-If you discover a security vulnerability, please report it privately via [GitHub Security Advisories](https://github.com/m1guel17/munai/security/advisories/new) rather than opening a public issue.
+If you discover a security vulnerability, please report it privately via [GitHub Security Advisories](https://github.com/m1guel17/munAI/security/advisories/new) rather than opening a public issue.
 
 munAI runs with access to your filesystem and can execute shell commands. Treat it with the same caution you would give to any software with system access. See [SECURITY.md](SECURITY.md) for the full security model.
 
