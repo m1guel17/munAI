@@ -150,6 +150,18 @@ class ChatPanel {
     }
   }
 
+  /**
+   * Finalize any tool cards still in running state (failsafe on agent.done).
+   * Prevents cards getting stuck in the animated running style.
+   */
+  finalizeRunningCards(isError = false) {
+    for (const [id, entry] of this._toolCards) {
+      if (entry.card.classList.contains('tool-card--running')) {
+        this.updateToolCard(id, '', isError);
+      }
+    }
+  }
+
   /** @deprecated Use addToolCard/updateToolCard instead. Legacy indicator fallback. */
   addToolIndicator(label) {
     this.clearToolIndicator();
@@ -217,6 +229,13 @@ class ChatPanel {
       if (event.type === 'user') {
         this.addUserMessage(event.text || '');
       } else if (event.type === 'assistant') {
+        if (event.tool_calls?.length) {
+          for (const tc of event.tool_calls) {
+            const id = 'h-' + tc.tool + '-' + Math.random().toString(36).slice(2);
+            this.addToolCard(id, tc.tool, tc.params);
+            this.updateToolCard(id, '', false);
+          }
+        }
         this.onDone(event.text || '', false);
       }
     }

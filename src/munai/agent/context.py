@@ -34,6 +34,7 @@ You are Munai, a self-hosted personal AI assistant running on the user's own har
 
 # Files injected into the system prompt, in order.
 _BOOTSTRAP_FILES = [
+    "BOOTSTRAP.md",
     "AGENTS.md",
     "SOUL.md",
     "USER.md",

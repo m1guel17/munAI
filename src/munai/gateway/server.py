@@ -502,6 +502,8 @@ class GatewayServer:
             await self._handle_config_set(client_id, req)
         elif req.method == "doctor.run":
             await self._handle_doctor_run(client_id, req)
+        elif req.method == "secrets.get":
+            await self._handle_secrets_get(client_id, req)
         elif req.method == "auth.devices.list":
             await self._handle_auth_devices_list(client_id, req)
         elif req.method == "auth.devices.revoke":
@@ -1052,6 +1054,21 @@ class GatewayServer:
         await self._send_response(
             client_id, req.id, ok=True, payload={"checks": checks}
         )
+
+    async def _handle_secrets_get(
+        self, client_id: str, req: RequestMessage
+    ) -> None:
+        """Return current values for requested env var keys from ~/.munai/.env."""
+        keys = req.params.get("keys", [])
+        env_path = MUNAI_DIR / ".env"
+        env_data: dict[str, str] = {}
+        if env_path.exists():
+            for line in env_path.read_text(encoding="utf-8").splitlines():
+                if "=" in line and not line.startswith("#"):
+                    k, _, v = line.partition("=")
+                    env_data[k.strip()] = v.strip()
+        values = {k: env_data.get(k, "") for k in keys}
+        await self._send_response(client_id, req.id, ok=True, payload={"values": values})
 
     async def _handle_auth_devices_list(
         self, client_id: str, req: RequestMessage

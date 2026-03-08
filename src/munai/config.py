@@ -279,7 +279,19 @@ def load_config(path: Union[str, Path] = CONFIG_PATH) -> Config:
         )
     with open(path, "r", encoding="utf-8") as f:
         raw = json5.load(f)
-    return Config.model_validate(raw)
+    config = Config.model_validate(raw)
+    # Inject ~/.munai/.env into os.environ (does not overwrite existing vars)
+    env_file = MUNAI_DIR / ".env"
+    if env_file.exists():
+        for line in env_file.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            if key and key not in os.environ:
+                os.environ[key] = value.strip()
+    return config
 
 
 def load_config_or_defaults(path: Union[str, Path] = CONFIG_PATH) -> Config:

@@ -7,21 +7,24 @@ class ConfigPanel {
     this._ws = ws;
     this._hash = null;
     this._config = null;
+    this._secrets = {};
     this._tab = 'form';
   }
 
   load() {
     const el = qs('#config-body');
     if (el) el.innerHTML = '<div class="panel-loading">Loading\u2026</div>';
-    this._ws.send('config.get', {})
-      .then(data => {
-        this._hash = data.hash;
-        this._config = data.config;
-        this._render();
-      })
-      .catch(() => {
-        if (el) el.innerHTML = '<div class="panel-error">Failed to load config.</div>';
-      });
+    Promise.all([
+      this._ws.send('config.get', {}),
+      this._ws.send('secrets.get', { keys: ['TELEGRAM_BOT_TOKEN'] }),
+    ]).then(([cfgData, secData]) => {
+      this._hash = cfgData.hash;
+      this._config = cfgData.config;
+      this._secrets = secData.values || {};
+      this._render();
+    }).catch(() => {
+      if (el) el.innerHTML = '<div class="panel-error">Failed to load config.</div>';
+    });
   }
 
   _render() {
@@ -107,6 +110,11 @@ class ConfigPanel {
           '</select></div>' +
         '<div class="config-form__row"><label>Allow from (user IDs, comma-separated)</label>' +
           '<input type="text" id="cfg-tg-allow-from" value="' + _cfgEsc((tg.allow_from || []).join(', ')) + '" /></div>' +
+        ((() => { const envKey = tg.bot_token_env || 'TELEGRAM_BOT_TOKEN'; const cur = this._secrets[envKey] || ''; return '' +
+        '<div class="config-form__row"><label>Bot token (' + _cfgEsc(envKey) + ')</label>' +
+          '<input type="password" id="cfg-tg-bot-token" autocomplete="off" ' +
+            'value="' + _cfgEsc(cur) + '" ' +
+            'placeholder="' + (cur ? 'configured' : 'paste token here') + '" /></div>'; })()) +
       '</details>' +
       '<details class="config-section">' +
         '<summary class="config-section__title">Heartbeat</summary>' +
@@ -214,6 +222,14 @@ class ConfigPanel {
         const banner = qs('#config-save-banner');
         if (banner) banner.hidden = false;
         this._ws.send('config.get', {}).then(d => { this._hash = d.hash; }).catch(() => {});
+        // Save bot token to ~/.munai/.env if the field has a new value
+        const botToken = qs('#cfg-tg-bot-token')?.value.trim();
+        const envKey = cfg.channels?.telegram?.bot_token_env || 'TELEGRAM_BOT_TOKEN';
+        if (botToken && botToken !== this._secrets[envKey]) {
+          this._ws.send('skills.set_env', { key: envKey, value: botToken })
+            .then(() => { this._secrets[envKey] = botToken; })
+            .catch(() => {});
+        }
       })
       .catch(err => {
         const msg = (err && err.message) ? err.message : 'Failed to save config.';

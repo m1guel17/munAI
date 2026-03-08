@@ -40,7 +40,7 @@ class DevicesPanel {
           '<strong>Pending pairing code:</strong> ' +
           '<span class="devices-code">' + _devEsc(pendingCode.code) + '</span>' +
           (pendingCode.expires_at
-            ? ' <span class="devices-code-expiry">(expires ' + _devEsc(new Date(pendingCode.expires_at).toLocaleTimeString()) + ')</span>'
+            ? ' <span class="devices-code-expiry">(expires ' + _devEsc(new Date(pendingCode.expires_at).toLocaleString()) + ')</span>'
             : '') +
         '</div>';
     }

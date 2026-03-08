@@ -146,6 +146,7 @@
   });
 
   ws.on('agent.done', ({ text, error, model, tokens_in, tokens_out }) => {
+    chat.finalizeRunningCards(!!error);
     chat.onDone(text, !!error);
     chat.setStreaming(false);
     if (sendBtn) sendBtn.disabled = !ws.connected;
@@ -177,6 +178,10 @@
     const banner = qs('#approval-banner');
     const commandEl = qs('#approval-command');
     if (!banner || !commandEl) return;
+    // Reset any lingering confirmation state
+    banner.classList.remove('approval-banner--approved', 'approval-banner--denied');
+    qs('#approval-banner .approval-banner__actions')?.removeAttribute('hidden');
+    qs('#approval-banner .approval-banner__confirm')?.remove();
     commandEl.textContent = Array.isArray(command) ? command.join(' ') : String(command);
     banner.hidden = false;
     qs('#approval-approve-btn')?.focus();
@@ -189,8 +194,28 @@
       console.warn('Approval response failed:', e.message);
     });
     _currentApprovalId = null;
+
     const banner = qs('#approval-banner');
-    if (banner) banner.hidden = true;
+    if (!banner) return;
+
+    const stateClass = approved ? 'approval-banner--approved' : 'approval-banner--denied';
+    const label = approved ? '✓ Approved' : '✗ Denied';
+    banner.classList.add(stateClass);
+
+    const actions = banner.querySelector('.approval-banner__actions');
+    if (actions) actions.hidden = true;
+
+    const confirmEl = document.createElement('span');
+    confirmEl.className = 'approval-banner__confirm';
+    confirmEl.textContent = label;
+    banner.appendChild(confirmEl);
+
+    setTimeout(() => {
+      banner.hidden = true;
+      banner.classList.remove(stateClass);
+      if (actions) actions.hidden = false;
+      confirmEl.remove();
+    }, 900);
   }
 
   qs('#approval-approve-btn')?.addEventListener('click', () => _respondApproval(true));

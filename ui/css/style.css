@@ -1,3 +1,6 @@
+/* ── Global reset ────────────────────────────────────────────────────────── */
+[hidden] { display: none !important; }
+
 /* ── CSS Custom Properties ───────────────────────────────────────────────── */
 :root {
   --bg-primary:    #0d1117;
@@ -363,6 +366,20 @@ body {
   word-break: break-all;
 }
 .approval-banner__actions { display: flex; gap: 8px; }
+#approval-banner.approval-banner--approved {
+  background: #0d2918;
+  border-color: var(--success);
+}
+#approval-banner.approval-banner--denied {
+  background: #2d0d0d;
+  border-color: var(--error);
+}
+.approval-banner__confirm {
+  font-weight: 600;
+  font-size: 13px;
+}
+#approval-banner.approval-banner--approved .approval-banner__confirm { color: var(--success); }
+#approval-banner.approval-banner--denied  .approval-banner__confirm { color: var(--error); }
 
 /* ── Tool activity indicator ─────────────────────────────────────────────── */
 .message--tool {
@@ -564,7 +581,14 @@ body {
   padding: 8px;
   border-radius: 4px;
 }
-.tool-card--running .tool-card__header { border-left: 3px solid var(--accent); }
+@keyframes tool-pulse {
+  0%, 100% { border-left-color: var(--accent); }
+  50%       { border-left-color: transparent; }
+}
+.tool-card--running .tool-card__header {
+  border-left: 3px solid var(--accent);
+  animation: tool-pulse 1.2s ease-in-out infinite;
+}
 .tool-card--done    .tool-card__header { border-left: 3px solid var(--success); }
 .tool-card--error   .tool-card__header { border-left: 3px solid var(--error); }
 
