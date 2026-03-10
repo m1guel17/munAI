@@ -12,7 +12,6 @@ if TYPE_CHECKING:
     from ..channels.pairing import PairingManager
     from ..channels.telegram import TelegramAdapter
     from ..config import Config
-    from ..gateway.session_manager import SessionManager
     from ..gateway.session_router import SessionRouter
 
 log = logging.getLogger(__name__)

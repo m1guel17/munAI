@@ -177,8 +177,8 @@ async def test_heartbeat_ok_suppresses_telegram_send(workspace: Path, config: Co
     telegram.send_message.assert_not_called()
 
 
-async def test_heartbeat_sends_when_no_suppression(workspace: Path, config: Config):
-    """Normal response should be sent to all allowed Telegram users."""
+async def test_heartbeat_never_forwards_to_telegram(workspace: Path, config: Config):
+    """Heartbeat responses are never forwarded to Telegram — they stay in their own session."""
     (workspace / "HEARTBEAT.md").write_text("- Check logs\n", encoding="utf-8")
 
     async def mock_run_turn(session_id, channel, sender_id, text, emit):
@@ -199,7 +199,7 @@ async def test_heartbeat_sends_when_no_suppression(workspace: Path, config: Conf
     scheduler = _make_scheduler(config, runtime=runtime, telegram=telegram, pairing=pairing, audit=audit)
     await scheduler._run_heartbeat()
 
-    assert telegram.send_message.call_count == 2
+    telegram.send_message.assert_not_called()
 
 
 async def test_heartbeat_logs_to_audit(workspace: Path, config: Config):

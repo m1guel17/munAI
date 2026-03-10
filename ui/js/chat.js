@@ -40,6 +40,23 @@ class ChatPanel {
   }
 
   /**
+   * Called on 'agent.interim' — append a separator + update text inline in the
+   * current streaming bubble. Opens a new bubble if one isn't already active.
+   */
+  onInterim(text) {
+    if (!this._currentAssistantBubble) {
+      const msg = this._createMessage('assistant');
+      msg.bubble.classList.add('message__bubble--streaming');
+      this._container.appendChild(msg.wrapper);
+      this._currentAssistantBubble = msg.bubble;
+      this._currentAssistantText = '';
+    }
+    this._currentAssistantText += (this._currentAssistantText ? '\n\n---\n\n' : '') + text;
+    this._currentAssistantBubble.textContent = this._currentAssistantText;
+    this._scrollToBottom();
+  }
+
+  /**
    * Called on 'agent.done' — finalize the assistant message with markdown rendering.
    * Switches from textContent to innerHTML only after streaming is complete.
    */

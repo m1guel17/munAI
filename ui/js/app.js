@@ -145,6 +145,10 @@
     if (text) chat.onDelta(text);
   });
 
+  ws.on('agent.interim', ({ text }) => {
+    if (text) chat.onInterim(text);
+  });
+
   ws.on('agent.done', ({ text, error, model, tokens_in, tokens_out }) => {
     chat.finalizeRunningCards(!!error);
     chat.onDone(text, !!error);
